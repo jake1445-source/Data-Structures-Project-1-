@@ -113,6 +113,50 @@ class LinkedEvents:
         print(f"Events sorted by {attribute1}")
 
 
+def merge_split(self, head, attribute):
+
+        if not head or not head.next:
+            return head
+
+        single_point = head
+        double_point = head
+
+        while double_point.next and double_point.next.next:
+            single_point = single_point.next
+            double_point = double_point.next.next
+
+        right = single_point.next
+        single_point.next = None
+
+        right_head = self.merge_split(right, attribute)
+        left_head = self.merge_split(head, attribute)
+
+        return self.merge_sort(left_head, right_head, attribute)
+
+
+def merge_sort(self, left_head, right_head, attribute):
+
+  current_left = left_head
+  current_right = right_head
+  start_node = Event(None, None, None, None, None)
+  last_node = start_node
+
+  while current_left and current_right:
+      if getattr(current_left, attribute) < getattr(current_right, attribute):
+          last_node.next = current_left
+          current_left = current_left.next
+      else:
+          last_node.next = current_right
+          current_right = current_right.next
+      last_node = last_node.next
+  if current_left:
+      last_node.next = current_left
+  if current_right:
+      last_node.next = current_right
+
+  return start_node.next
+
+
 def generate_linked_events(n):
   '''
   Generates a list of n events. Note that this only generates dates and times, not location, ID, or title. This is because we only care       about the sorting performance, and the sorting is only based on date and time 
